@@ -4,13 +4,13 @@ import ApiClient from "../../../../utils/ApiClient";
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { NavLink } from "react-router";
 
-interface SignInForm {
+interface SignUpForm {
     email : string,
     password : string
 }
 
 function SignIn() {
-    const [form, setForm] = useState<SignInForm> ({
+    const [form, setForm] = useState<SignUpForm> ({
             email: "",
             password: ""
         })
@@ -27,7 +27,7 @@ function SignIn() {
     const onSubmit = async (event : FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         try {
-            const response = await ApiClient.post('/signip', form)
+            const response = await ApiClient.post('/signin', form)
             console.log(response)
         } catch (error) {
             console.log(error);
@@ -59,7 +59,7 @@ function SignIn() {
                 </Form.Group>
                 <br></br>
                 <Button type="submit" variant="primary">Sign In</Button>        
-                <NavLink to = "/signIn"> Sign In </NavLink>        
+                <NavLink to = "/"> Sign Up </NavLink>        
             </Form>
     </div>
 }

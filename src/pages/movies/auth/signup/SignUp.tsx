@@ -4,14 +4,14 @@ import ApiClient from "../../../../utils/ApiClient"
 import { NavLink } from "react-router"
 
 
-interface signform{
+interface signUpform{
     username: string,
     email: string,
     password: string
 }
 
 function SignUp() {
-    const [form, setForm] = useState<signform>({
+    const [form, setForm] = useState<signUpform>({
         username: "",
         email: "",
         password: ""
@@ -40,6 +40,7 @@ function SignUp() {
     }
 
     return <div className="container mex-auto">
+        <h1> Sign Up </h1> <br></br> 
         <Form>
                 <Form.Group className="mb-3" controlId="formUsername">
                     <Form.Label>Username</Form.Label>
