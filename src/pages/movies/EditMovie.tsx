@@ -1,0 +1,97 @@
+import { Button } from "react-bootstrap";
+import { NavLink } from "react-router";
+import Form from 'react-bootstrap/Form';
+import { useState, type ChangeEvent, type FormEvent } from "react";
+import ApiClient from "../../utils/ApiClient";
+
+interface FormMovie{
+    judul: string,
+    tahunRilis: string,
+    sutradara: string
+}
+
+interface responseData {
+    data : {
+        _id : string,
+        judul : string,
+        sutradara : string,
+        tahunRilis : string,
+        createdBy : string,
+        createdAt : string,
+        updateAt : string,
+        __v : string
+    },
+    message : string
+}
+
+function EditMovies() {
+    const [form, setForm] = useState<FormMovie>({
+        judul: "",
+        tahunRilis: "",
+        sutradara: ""
+    })
+
+    const handleInputChange = (event : ChangeEvent<HTMLInputElement>) => {
+        const {name, value} = event.target
+
+        setForm({
+            ...form,
+            [name]: value
+        })
+    }
+
+    const handleSubmit = async (event : FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        try {
+            const response = await ApiClient.post("/movies", form)
+            console.log(response);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    return <div className="container mex-auto">
+        <div className="d-flex justify-content-between mb-3">
+        <h4>Add Movie Page</h4>
+        <NavLink to="/" className="btn btn-primary">List Movie</NavLink>
+        </div>
+        <div>
+            <Form onSubmit={handleSubmit}>
+                <Form.Group className="mb-3" controlId="formjudul">
+                    <Form.Label>Judul</Form.Label>
+                    <Form.Control 
+                    value={form.judul}
+                    onChange={handleInputChange}
+                    name="judul"
+                    type="text" 
+                    placeholder="Judul Film"/>
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formTahunRilis">
+                    <Form.Label>Tahun Rilis</Form.Label>
+                    <Form.Control 
+                    value={form.tahunRilis}
+                    onChange={handleInputChange}
+                    name="tahunRilis"
+                    type="text" 
+                    placeholder="Tahun Rilis"/>
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formjudul">
+                    <Form.Label>Sutradara</Form.Label>
+                    <Form.Control 
+                    value={form.sutradara}
+                    onChange={handleInputChange}
+                    name="sutradara"
+                    type="text" 
+                    placeholder="Sutradara"/>
+                </Form.Group>
+
+                <Button type="submit" variant="primary">
+                    Simpan
+                </Button>
+            </Form>
+        </div>
+    </div>
+}
+
+export default EditMovies;
