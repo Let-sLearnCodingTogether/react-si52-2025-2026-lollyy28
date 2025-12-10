@@ -1,7 +1,7 @@
 import { Button } from "react-bootstrap";
-import { NavLink } from "react-router";
+import { NavLink, useParams } from "react-router";
 import Form from 'react-bootstrap/Form';
-import { useState, type ChangeEvent, type FormEvent } from "react";
+import { useCallback, useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 import ApiClient from "../../utils/ApiClient";
 
 interface FormMovie{
@@ -10,7 +10,7 @@ interface FormMovie{
     sutradara: string
 }
 
-interface responseData {
+interface ResponseData {
     data : {
         _id : string,
         judul : string,
@@ -25,11 +25,25 @@ interface responseData {
 }
 
 function EditMovies() {
+    const params = useParams()
     const [form, setForm] = useState<FormMovie>({
         judul: "",
         tahunRilis: "",
         sutradara: ""
     })
+
+    const fetchMovies = useCallback(async() => {
+        const response = await ApiClient.get(`/movies/${params.id}`)
+
+        if (response.status === 200) {
+            const ResponseData : ResponseData = response.data
+            setForm({
+                judul : ResponseData.data.judul,
+                tahunRilis : ResponseData.data.tahunRilis,
+                sutradara : ResponseData.data.sutradara
+            })
+        }
+    },[params])
 
     const handleInputChange = (event : ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target
@@ -50,6 +64,10 @@ function EditMovies() {
             console.log(error);
         }
     }
+
+    useEffect(() => {
+        fetchMovies()
+    }, [fetchMovies])
 
     return <div className="container mex-auto">
         <div className="d-flex justify-content-between mb-3">
